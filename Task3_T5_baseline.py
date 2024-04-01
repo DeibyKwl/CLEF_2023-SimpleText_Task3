@@ -15,7 +15,7 @@ def get_tsv_data(file_path):
 
     data = pd.read_csv(file_path, sep='\t')
     
-    for index, row in data.iterrows():
+    for _, row in data.iterrows():
         query_text = row['query_text']
         snt_id = row['snt_id']
         source_snt = row['source_snt']
@@ -26,47 +26,28 @@ def get_tsv_data(file_path):
 
     return snt_ids, source_sentences, query_texts
 
-# def simplify_text(sentences):
-#     simplified_texts = []
 
-#     for sentence in sentences:
-#         print(sentence)
-#         # Preprocess the input sentence
-#         input_text = "Simplify: " + sentence
-#         input_ids = tokenizer.encode(input_text, return_tensors="pt")
-
-#         # Generate simplified text
-#         output_ids = model.generate(input_ids, max_length=100, num_return_sequences=1)
-#         simplified_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
-
-#         simplified_texts.append(simplified_text)
-
-#     return simplified_texts
-
-def summarize_text(sentences):
+def simplify_text(sentences):
 
     summaries = []
-
-    for sentence in sentences:
-        inputs = tokenizer.encode(
-            "summarize: " + sentence,
-            return_tensors='pt',
-            max_length=50,
-            truncation=True
-        )
     
+    for sentence in sentences:
+        # Preprocess the input by incorporating query words
+        input_text = "summarize: " + sentence
+        inputs = tokenizer.encode(input_text, return_tensors='pt', max_length=512, truncation=True)
+        
         # Generate the summary
         summary_ids = model.generate(
             inputs,
-            max_length=512,
+            max_length=150,
             num_beams=5,
             # early_stopping=True,
         )
-
+        
+        # Decode the summary
         summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
         summaries.append(summary)
- 
-    # Decode and return the summary
+    
     return summaries
 
 def create_tsv(snt_ids, summaries):
@@ -86,8 +67,8 @@ def main():
     snt_ids, source_sentences, query_texts = get_tsv_data(file_path)
 
     # Simplify the query texts
-    simplified_texts = summarize_text(source_sentences)
-    create_tsv(snt_ids, source_sentences)
+    simplified_texts = simplify_text(source_sentences)
+    create_tsv(snt_ids, simplified_texts)
 
 
 
