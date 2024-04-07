@@ -1,0 +1,6 @@
+evaluate==0.4.1
+nltk==3.8.1
+textstat==0.7.3
+torch==2.1.1+cu121
+transformers==4.39.1
+pandas==2.1.3
