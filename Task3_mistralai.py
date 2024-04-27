@@ -107,7 +107,7 @@ def create_tsv_metrics(snt_ids, source_sentences, simplified_snts, qrels_snts):
 
 def main():
     if len(sys.argv) != 3:
-        print('Usage: python Task3_Llama2_baseline <filename1> <filename2>')
+        print('Usage: python Task3_mistralai.py <filename1> <filename2>')
         return
     file_path = sys.argv[1]
     snt_ids, source_sentences, query_texts = get_tsv_data(file_path)
