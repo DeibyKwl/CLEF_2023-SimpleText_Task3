@@ -1,5 +1,5 @@
 evaluate==0.4.1
-nltk==3.8.1
+nltk==3.9
 textstat==0.7.3
 torch
 transformers==4.39.1
